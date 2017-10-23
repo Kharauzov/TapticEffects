@@ -83,44 +83,36 @@ extension UIDevice {
     }
     
     var platform: DevicePlatform {
-        get {
-            var sysinfo = utsname()
-            uname(&sysinfo)
-            let platform = String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
-            switch platform {
-            case "iPhone10,3", "iPhone10,6":
-                return .iPhoneX
-            case "iPhone10,2", "iPhone10,5":
-                return .iPhone8Plus
-            case "iPhone10,1", "iPhone10,4":
-                return .iPhone8
-            case "iPhone9,2", "iPhone9,4":
-                return .iPhone7Plus
-            case "iPhone9,1", "iPhone9,3":
-                return .iPhone7
-            case "iPhone8,2":
-                return .iPhone6SPlus
-            case "iPhone8,1":
-                return .iPhone6S
-            default:
-                return .other
-            }
+        var sysinfo = utsname()
+        uname(&sysinfo)
+        let platform = String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+        switch platform {
+        case "iPhone10,3", "iPhone10,6":
+            return .iPhoneX
+        case "iPhone10,2", "iPhone10,5":
+            return .iPhone8Plus
+        case "iPhone10,1", "iPhone10,4":
+            return .iPhone8
+        case "iPhone9,2", "iPhone9,4":
+            return .iPhone7Plus
+        case "iPhone9,1", "iPhone9,3":
+            return .iPhone7
+        case "iPhone8,2":
+            return .iPhone6SPlus
+        case "iPhone8,1":
+            return .iPhone6S
+        default:
+            return .other
         }
     }
     
     /// Enabled from iPhone6/iPhone6Plus.
     var hasTapticEngine: Bool {
-        get {
-            return platform != .other
-        }
+        return platform != .other
     }
     
     /// Enabled from iPhone7/iPhone7Plus.
     var hasHapticFeedback: Bool {
-        get {
-            return platform == .iPhone7 || platform == .iPhone7Plus ||
-                platform == .iPhone8 || platform == .iPhone8Plus ||
-                platform == .iPhoneX
-        }
+        return [.iPhone7, .iPhone7Plus, .iPhone8, .iPhone8Plus, .iPhoneX].contains(platform)
     }
 }
